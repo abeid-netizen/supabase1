@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { LoginForm } from "@/components/LoginForm";
-import { Dashboard } from "@/pages/Dashboard";
+import Dashboard from "@/pages/Dashboard";
 import { SalesDashboard } from "@/pages/SalesDashboard";
 import { SalesCart } from "@/pages/SalesCart";
 import { InventoryDashboard } from "@/pages/InventoryDashboard";
