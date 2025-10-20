@@ -452,13 +452,20 @@ export const categoryService = {
 export const supplierService = {
   async getSuppliers() {
     try {
-      const { data, error } = await supabase
+      // First try to fetch suppliers
+      let { data, error } = await supabase
         .from('suppliers')
         .select('*')
         .order('name')
 
+      // If suppliers table doesn't exist, return empty array
+      if (error && error.code === 'PGRST205') {
+        console.warn('Suppliers table not found, returning empty array');
+        return [];
+      }
+
       if (error) throw error
-      return data
+      return data || []
     } catch (error) {
       console.error('Error fetching suppliers:', error)
       throw error
@@ -597,20 +604,32 @@ export const expenseService = {
 export const enhancedProductService = {
   async getProducts() {
     try {
-      const { data, error } = await supabase
+      // First try to fetch products with categories and suppliers
+      let { data, error } = await supabase
         .from('products')
         .select(`
           *,
           categories(name),
           suppliers(name)
         `)
-        .order('name')
+        .order('name');
 
-      if (error) throw error
-      return data
+      // If that fails due to relationship issues, fall back to just products
+      if (error && (error.code === 'PGRST200' || error.message.includes('relationship'))) {
+        console.warn('Foreign key relationships not found, fetching products only');
+        const fallbackResult = await supabase
+          .from('products')
+          .select('*')
+          .order('name');
+        data = fallbackResult.data;
+        error = fallbackResult.error;
+      }
+
+      if (error) throw error;
+      return data || [];
     } catch (error) {
-      console.error('Error fetching products:', error)
-      throw error
+      console.error('Error fetching products:', error);
+      throw error;
     }
   },
 
@@ -619,13 +638,13 @@ export const enhancedProductService = {
       const { data, error } = await supabase
         .from('products')
         .insert([product])
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error adding product:', error)
-      throw error
+      console.error('Error adding product:', error);
+      throw error;
     }
   },
 
@@ -635,13 +654,13 @@ export const enhancedProductService = {
         .from('products')
         .update(updates)
         .eq('id', id)
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error updating product:', error)
-      throw error
+      console.error('Error updating product:', error);
+      throw error;
     }
   },
 
@@ -650,12 +669,12 @@ export const enhancedProductService = {
       const { error } = await supabase
         .from('products')
         .delete()
-        .eq('id', id)
+        .eq('id', id);
 
-      if (error) throw error
+      if (error) throw error;
     } catch (error) {
-      console.error('Error deleting product:', error)
-      throw error
+      console.error('Error deleting product:', error);
+      throw error;
     }
   },
 
@@ -665,13 +684,13 @@ export const enhancedProductService = {
         .from('products')
         .select('*')
         .lt('quantity', threshold)
-        .order('quantity')
+        .order('quantity');
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching low stock products:', error)
-      throw error
+      console.error('Error fetching low stock products:', error);
+      throw error;
     }
   }
 }

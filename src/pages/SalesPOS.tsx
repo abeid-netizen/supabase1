@@ -88,10 +88,11 @@ export const SalesPOS = ({ username, onBack, onLogout }: SalesPOSProps) => {
         customerService.getCustomers()
       ]);
       
-      setProducts(productsData);
-      setFilteredProducts(productsData);
-      setCustomers(customersData);
+      setProducts(productsData || []);
+      setFilteredProducts(productsData || []);
+      setCustomers(customersData || []);
     } catch (error: any) {
+      console.error('Error loading data:', error);
       toast({
         title: t("common.error"),
         description: error.message || t("sales.failedToLoadData"),

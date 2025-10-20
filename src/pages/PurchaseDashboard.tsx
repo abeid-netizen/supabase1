@@ -74,16 +74,16 @@ export const PurchaseDashboard = ({ username, onBack, onLogout }: PurchaseDashbo
         enhancedProductService.getProducts()
       ]);
       
-      setSuppliers(suppliersData);
-      setProducts(productsData);
+      setSuppliers(suppliersData || []);
+      setProducts(productsData || []);
       
       // Mock purchase orders for demonstration
       // In a real implementation, you would fetch these from the database
       const mockOrders: PurchaseOrder[] = [
         {
           id: "1",
-          supplier_id: suppliersData[0]?.id || "",
-          supplier_name: suppliersData[0]?.name || "Unknown Supplier",
+          supplier_id: (suppliersData && suppliersData[0]) ? suppliersData[0].id || "" : "",
+          supplier_name: (suppliersData && suppliersData[0]) ? suppliersData[0].name || "Unknown Supplier" : "Unknown Supplier",
           order_date: new Date().toISOString(),
           expected_delivery_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           total_amount: 500000,
@@ -91,8 +91,8 @@ export const PurchaseDashboard = ({ username, onBack, onLogout }: PurchaseDashbo
           items: [
             {
               id: "1-1",
-              product_id: productsData[0]?.id || "",
-              product_name: productsData[0]?.name || "Product 1",
+              product_id: (productsData && productsData[0]) ? productsData[0].id || "" : "",
+              product_name: (productsData && productsData[0]) ? productsData[0].name || "Product 1" : "Product 1",
               quantity: 100,
               unit_price: 5000,
               total_price: 500000
@@ -103,6 +103,7 @@ export const PurchaseDashboard = ({ username, onBack, onLogout }: PurchaseDashbo
       
       setPurchaseOrders(mockOrders);
     } catch (error: any) {
+      console.error('Error loading data:', error);
       toast({
         title: t("common.error"),
         description: error.message || t("purchase.failedToLoadData"),

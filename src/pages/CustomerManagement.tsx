@@ -43,8 +43,9 @@ export const CustomerManagement = ({ username, onBack, onLogout }: CustomerManag
   const loadCustomers = async () => {
     try {
       const data = await customerService.getCustomers();
-      setCustomers(data);
+      setCustomers(data || []);
     } catch (error: any) {
+      console.error('Error loading customers:', error);
       toast({
         title: t("common.error"),
         description: error.message || t("customers.failedToLoadCustomers"),

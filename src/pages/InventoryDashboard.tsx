@@ -38,8 +38,9 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
   const loadProducts = async () => {
     try {
       const data = await productService.getProducts();
-      setProducts(data);
+      setProducts(data || []);
     } catch (error) {
+      console.error('Error loading products:', error);
       toast({
         title: t("common.error"),
         description: t("inventory.failedToLoadProducts"),
