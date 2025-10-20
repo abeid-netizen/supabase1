@@ -1,73 +1,139 @@
-# Welcome to your Lovable project
+# Business POS System with Supabase
 
-## Project info
+A modern Point of Sale system built with React, TypeScript, and Supabase.
 
-**URL**: https://lovable.dev/projects/9f9e30d6-d3f0-4c0d-990f-ab3b9f33d598
+## Features
 
-## How can I edit this code?
+- User authentication with Supabase Auth
+- Inventory management
+- Sales processing
+- Transaction history
+- Responsive UI with shadcn-ui components
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- React + TypeScript
+- Vite (build tool)
+- Supabase (backend-as-a-service)
+- shadcn-ui + Tailwind CSS (UI components)
+- React Router (routing)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9f9e30d6-d3f0-4c0d-990f-ab3b9f33d598) and start prompting.
+## Setup Instructions
 
-Changes made via Lovable will be committed automatically to this repo.
+### 1. Supabase Setup
 
-**Use your preferred IDE**
+1. Create a Supabase account at [supabase.com](https://supabase.com/)
+2. Create a new project
+3. Get your Project URL and anon key from the Supabase dashboard (Project Settings > API)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 2. Environment Variables
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Create a [.env](file:///E:/PROJECTS/LOVABLE/bulletproofPOS/sheet-point-dash-SUPABASE/.env) file in the root directory with your Supabase credentials:
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-**Edit a file directly in GitHub**
+### 3. Database Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Run the SQL commands in your Supabase SQL Editor to create the necessary tables:
 
-**Use GitHub Codespaces**
+```sql
+-- Create products table
+create table products (
+  id uuid default gen_random_uuid() primary key,
+  name varchar(255) not null,
+  price decimal(10,2) not null,
+  quantity integer not null default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+-- Create transactions table
+create table transactions (
+  id uuid default gen_random_uuid() primary key,
+  customer_name varchar(255) not null,
+  total_amount decimal(10,2) not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
 
-## What technologies are used for this project?
+-- Create transaction_items table
+create table transaction_items (
+  id uuid default gen_random_uuid() primary key,
+  transaction_id uuid references transactions(id) on delete cascade,
+  product_id uuid references products(id),
+  quantity integer not null,
+  price decimal(10,2) not null
+);
 
-This project is built with:
+-- Create indexes
+create index on products(name);
+create index on transactions(created_at);
+create index on transaction_items(transaction_id);
+create index on transaction_items(product_id);
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Development
 
-## How can I deploy this project?
+1. Install dependencies:
+   ```
+   npm install
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/9f9e30d6-d3f0-4c0d-990f-ab3b9f33d598) and click on Share -> Publish.
+2. Start the development server:
+   ```
+   npm run dev
+   ```
 
-## Can I connect a custom domain to my Lovable project?
+3. Visit `http://localhost:8080` in your browser
 
-Yes, you can!
+## Deployment
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Deploy to Netlify
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+1. Push your code to a GitHub repository
+2. Sign up for a Netlify account at [netlify.com](https://netlify.com/)
+3. Click "New site from Git" in your Netlify dashboard
+4. Connect your GitHub repository
+5. Configure the build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+6. Add your environment variables in the Netlify dashboard:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+7. Deploy the site
+
+### Manual Deployment
+
+1. Build the project:
+   ```
+   npm run build
+   ```
+
+2. The built files will be in the `dist` directory
+3. Upload these files to any static hosting service
+
+## Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn-ui components
+│   ├── DashboardCard.tsx
+│   ├── LoginForm.tsx
+│   └── Navigation.tsx
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+│   └── supabase.ts     # Supabase client configuration
+├── pages/              # Page components
+│   ├── Dashboard.tsx
+│   ├── Index.tsx
+│   ├── InventoryDashboard.tsx
+│   ├── NotFound.tsx
+│   ├── SalesCart.tsx
+│   └── SalesDashboard.tsx
+├── services/           # Business logic and API services
+│   ├── authService.ts
+│   └── productService.ts
+└── App.tsx             # Main app component
+```

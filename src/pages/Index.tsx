@@ -1,24 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LoginForm } from "@/components/LoginForm";
 import { Dashboard } from "@/pages/Dashboard";
 import { SalesDashboard } from "@/pages/SalesDashboard";
 import { SalesCart } from "@/pages/SalesCart";
+import { InventoryDashboard } from "@/pages/InventoryDashboard";
+import { authService } from "@/services/authService";
+import { useToast } from "@/hooks/use-toast";
 
-type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "inventory" | "purchase" | "finance";
+type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "inventory" | "inventory-dashboard" | "purchase" | "finance";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewState>("login");
-  const [user, setUser] = useState<{ username: string } | null>(null);
+  const [user, setUser] = useState<any | null>(null);
+  const { toast } = useToast();
 
-  const handleLogin = (credentials: { username: string; password: string }) => {
-    // In a real app, you would validate credentials with Google Sheets
-    setUser({ username: credentials.username });
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const currentUser = await authService.getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+        setCurrentView("dashboard");
+      }
+    };
+    
+    checkUser();
+  }, []);
+
+  const handleLogin = (user: any) => {
+    setUser(user);
     setCurrentView("dashboard");
+    toast({
+      title: "Welcome!",
+      description: `You're logged in as ${user.email}`,
+    });
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    setCurrentView("login");
+  const handleLogout = async () => {
+    try {
+      await authService.signOut();
+      setUser(null);
+      setCurrentView("login");
+      toast({
+        title: "Signed out",
+        description: "You have been successfully logged out",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleNavigate = (destination: string) => {
@@ -30,6 +63,8 @@ const Index = () => {
         setCurrentView("sales-cart");
         break;
       case "inventory":
+        setCurrentView("inventory-dashboard");
+        break;
       case "purchase":
       case "finance":
         // These will be implemented later
@@ -48,6 +83,9 @@ const Index = () => {
       case "sales-cart":
         setCurrentView("sales");
         break;
+      case "inventory-dashboard":
+        setCurrentView("dashboard");
+        break;
       default:
         setCurrentView("dashboard");
     }
@@ -65,7 +103,7 @@ const Index = () => {
     case "dashboard":
       return (
         <Dashboard
-          username={user.username}
+          username={user.email}
           onNavigate={handleNavigate}
           onLogout={handleLogout}
         />
@@ -73,7 +111,7 @@ const Index = () => {
     case "sales":
       return (
         <SalesDashboard
-          username={user.username}
+          username={user.email}
           onBack={handleBack}
           onLogout={handleLogout}
           onNavigate={handleNavigate}
@@ -82,7 +120,15 @@ const Index = () => {
     case "sales-cart":
       return (
         <SalesCart
-          username={user.username}
+          username={user.email}
+          onBack={handleBack}
+          onLogout={handleLogout}
+        />
+      );
+    case "inventory-dashboard":
+      return (
+        <InventoryDashboard
+          username={user.email}
           onBack={handleBack}
           onLogout={handleLogout}
         />

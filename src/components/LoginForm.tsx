@@ -5,13 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, Lock, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { authService, UserCredentials } from "@/services/authService";
 
 interface LoginFormProps {
-  onLogin: (credentials: { username: string; password: string }) => void;
+  onLogin: (user: any) => void;
 }
 
 export const LoginForm = ({ onLogin }: LoginFormProps) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -19,7 +20,7 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!username || !password) {
+    if (!email || !password) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
@@ -30,11 +31,29 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
 
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      onLogin({ username, password });
+    try {
+      const credentials: UserCredentials = { email, password };
+      const { user, error } = await authService.signIn(credentials);
+      
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to sign in",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+      
+      onLogin(user);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -52,15 +71,15 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="email">Email</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="username"
-                  type="text"
-                  placeholder="Enter your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
                 />
               </div>

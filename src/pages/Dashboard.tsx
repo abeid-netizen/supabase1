@@ -6,6 +6,7 @@ import {
   ShoppingBag, 
   DollarSign 
 } from "lucide-react";
+import { InventoryDashboard } from "@/pages/InventoryDashboard";
 
 interface DashboardProps {
   username: string;
