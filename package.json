@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "setup:supabase": "node scripts/setup-supabase.js",
-    "verify:deployment": "node scripts/verify-deployment.js"
+    "verify:deployment": "node scripts/verify-deployment.js",
+    "deploy:netlify": "node scripts/deploy-netlify.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

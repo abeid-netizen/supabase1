@@ -3,8 +3,14 @@ import { supabase } from '@/lib/supabase'
 export interface Product {
   id?: string
   name: string
+  description?: string
   price: number
+  cost?: number
   quantity: number
+  min_stock_level?: number
+  category_id?: string
+  supplier_id?: string
+  barcode?: string
   created_at?: string
 }
 

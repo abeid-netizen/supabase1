@@ -20,8 +20,11 @@ interface InventoryDashboardProps {
 export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDashboardProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [productName, setProductName] = useState("");
+  const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [productCost, setProductCost] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
+  const [productBarcode, setProductBarcode] = useState("");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -56,6 +59,7 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
     }
 
     const price = parseFloat(productPrice);
+    const cost = parseFloat(productCost) || 0;
     const quantity = parseInt(productQuantity);
 
     if (isNaN(price) || price <= 0) {
@@ -83,8 +87,11 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
         // Update existing product
         await productService.updateProduct(editingProduct.id!, {
           name: productName,
+          description: productDescription,
           price,
-          quantity
+          cost,
+          quantity,
+          barcode: productBarcode
         });
         toast({
           title: t("common.success"),
@@ -94,8 +101,11 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
         // Add new product
         await productService.addProduct({
           name: productName,
+          description: productDescription,
           price,
-          quantity: quantity
+          cost,
+          quantity: quantity,
+          barcode: productBarcode
         });
         toast({
           title: t("common.success"),
@@ -105,8 +115,11 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
 
       // Reset form
       setProductName("");
+      setProductDescription("");
       setProductPrice("");
+      setProductCost("");
       setProductQuantity("");
+      setProductBarcode("");
       setEditingProduct(null);
 
       // Reload products
@@ -125,8 +138,11 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
     setProductName(product.name);
+    setProductDescription(product.description || "");
     setProductPrice(product.price.toString());
+    setProductCost(product.cost?.toString() || "");
     setProductQuantity(product.quantity.toString());
+    setProductBarcode(product.barcode || "");
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -149,8 +165,11 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
   const cancelEdit = () => {
     setEditingProduct(null);
     setProductName("");
+    setProductDescription("");
     setProductPrice("");
+    setProductCost("");
     setProductQuantity("");
+    setProductBarcode("");
   };
 
   return (
@@ -189,6 +208,14 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                 />
               </div>
               <div>
+                <label className="text-sm font-medium">{t("inventory.productDescription")}</label>
+                <Input
+                  placeholder={t("inventory.productDescription")}
+                  value={productDescription}
+                  onChange={(e) => setProductDescription(e.target.value)}
+                />
+              </div>
+              <div>
                 <label className="text-sm font-medium">{t("inventory.productPrice")}</label>
                 <Input
                   type="number"
@@ -199,12 +226,30 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                 />
               </div>
               <div>
+                <label className="text-sm font-medium">{t("inventory.productCost")}</label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={productCost}
+                  onChange={(e) => setProductCost(e.target.value)}
+                />
+              </div>
+              <div>
                 <label className="text-sm font-medium">{t("inventory.productQuantity")}</label>
                 <Input
                   type="number"
                   placeholder="0"
                   value={productQuantity}
                   onChange={(e) => setProductQuantity(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">{t("inventory.productBarcode")}</label>
+                <Input
+                  placeholder={t("inventory.productBarcode")}
+                  value={productBarcode}
+                  onChange={(e) => setProductBarcode(e.target.value)}
                 />
               </div>
               <div className="flex gap-2">
@@ -261,7 +306,17 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                             <p className="text-sm text-muted-foreground">
                               {t("common.quantity")}: {product.quantity}
                             </p>
+                            {product.barcode && (
+                              <p className="text-sm text-muted-foreground">
+                                {t("inventory.barcode")}: {product.barcode}
+                              </p>
+                            )}
                           </div>
+                          {product.description && (
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {product.description}
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center gap-2">
                           <Button
