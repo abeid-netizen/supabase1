@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { productService, Product } from "@/services/productService";
+import { useTranslation } from "react-i18next";
 
 interface InventoryDashboardProps {
   username: string;
@@ -23,6 +24,7 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   // Load products from Supabase
   useEffect(() => {
@@ -35,8 +37,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
       setProducts(data);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load products",
+        title: t("common.error"),
+        description: t("inventory.failedToLoadProducts"),
         variant: "destructive",
       });
     }
@@ -45,8 +47,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
   const handleAddProduct = async () => {
     if (!productName || !productPrice || !productQuantity) {
       toast({
-        title: "Error",
-        description: "Please fill in all fields",
+        title: t("common.error"),
+        description: t("inventory.pleaseFillAllFields"),
         variant: "destructive",
       });
       return;
@@ -57,8 +59,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
 
     if (isNaN(price) || price <= 0) {
       toast({
-        title: "Error",
-        description: "Please enter a valid price",
+        title: t("common.error"),
+        description: t("inventory.pleaseEnterValidPrice"),
         variant: "destructive",
       });
       return;
@@ -66,8 +68,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
 
     if (isNaN(quantity) || quantity < 0) {
       toast({
-        title: "Error",
-        description: "Please enter a valid quantity",
+        title: t("common.error"),
+        description: t("inventory.pleaseEnterValidQuantity"),
         variant: "destructive",
       });
       return;
@@ -84,8 +86,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
           quantity
         });
         toast({
-          title: "Success",
-          description: "Product updated successfully",
+          title: t("common.success"),
+          description: t("inventory.productUpdated"),
         });
       } else {
         // Add new product
@@ -95,8 +97,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
           quantity: quantity
         });
         toast({
-          title: "Success",
-          description: "Product added successfully",
+          title: t("common.success"),
+          description: t("inventory.productAdded"),
         });
       }
 
@@ -110,8 +112,8 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
       await loadProducts();
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "Failed to save product",
+        title: t("common.error"),
+        description: error.message || t("inventory.failedToSaveProduct"),
         variant: "destructive",
       });
     } finally {
@@ -130,14 +132,14 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
     try {
       await productService.deleteProduct(id);
       toast({
-        title: "Success",
-        description: "Product deleted successfully",
+        title: t("common.success"),
+        description: t("inventory.productDeleted"),
       });
       await loadProducts();
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "Failed to delete product",
+        title: t("common.error"),
+        description: error.message || t("inventory.failedToDeleteProduct"),
         variant: "destructive",
       });
     }
@@ -153,7 +155,7 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
   return (
     <div className="min-h-screen bg-background">
       <Navigation 
-        title="Inventory Dashboard" 
+        title={t("inventory.title")} 
         onBack={onBack}
         onLogout={onLogout} 
         username={username}
@@ -161,9 +163,9 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
       
       <main className="container mx-auto p-6">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">Inventory Management</h2>
+          <h2 className="text-3xl font-bold mb-2">{t("inventory.title")}</h2>
           <p className="text-muted-foreground">
-            Manage your products and stock levels
+            {t("inventory.description")}
           </p>
         </div>
 
@@ -173,20 +175,20 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Plus className="h-5 w-5" />
-                {editingProduct ? "Edit Product" : "Add New Product"}
+                {editingProduct ? t("inventory.editProduct") : t("inventory.addProduct")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium">Product Name</label>
+                <label className="text-sm font-medium">{t("inventory.productName")}</label>
                 <Input
-                  placeholder="Enter product name"
+                  placeholder={t("inventory.productName")}
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Price ($)</label>
+                <label className="text-sm font-medium">{t("inventory.productPrice")}</label>
                 <Input
                   type="number"
                   step="0.01"
@@ -196,7 +198,7 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Quantity</label>
+                <label className="text-sm font-medium">{t("inventory.productQuantity")}</label>
                 <Input
                   type="number"
                   placeholder="0"
@@ -210,15 +212,17 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                   className="flex-1"
                   disabled={isLoading}
                 >
-                  {isLoading ? (editingProduct ? "Updating..." : "Adding...") : 
-                   (editingProduct ? "Update Product" : "Add Product")}
+                  {isLoading ? 
+                    (editingProduct ? t("common.processing") : t("common.adding")) : 
+                    (editingProduct ? t("inventory.updateProductButton") : t("inventory.addProductButton"))
+                  }
                 </Button>
                 {editingProduct && (
                   <Button 
                     variant="outline" 
                     onClick={cancelEdit}
                   >
-                    Cancel
+                    {t("common.cancel")}
                   </Button>
                 )}
               </div>
@@ -231,17 +235,17 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    Product Inventory
+                    {t("inventory.productInventory")}
                   </div>
                   <Badge variant="secondary">
-                    {products.length} products
+                    {t("inventory.productsCount", { count: products.length })}
                   </Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {products.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
-                    <p>No products found</p>
+                    <p>{t("inventory.noProducts")}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -251,10 +255,10 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                           <h4 className="font-medium">{product.name}</h4>
                           <div className="flex gap-4 mt-1">
                             <p className="text-sm text-muted-foreground">
-                              Price: ${product.price.toFixed(2)}
+                              {t("common.price")}: ${product.price.toFixed(2)}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              Qty: {product.quantity}
+                              {t("common.quantity")}: {product.quantity}
                             </p>
                           </div>
                         </div>

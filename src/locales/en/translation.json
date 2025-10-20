@@ -1,0 +1,118 @@
+{
+  "common": {
+    "welcome": "Welcome back, {{name}}!",
+    "logout": "Logout",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "total": "Total",
+    "quantity": "Quantity",
+    "price": "Price",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "customerName": "Customer Name",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "processing": "Processing...",
+    "success": "Success",
+    "error": "Error"
+  },
+  "auth": {
+    "title": "Business POS",
+    "description": "Sign in to access your business dashboard",
+    "usernamePlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "missingFields": "Please fill in all fields",
+    "signInFailed": "Failed to sign in",
+    "unexpectedError": "An unexpected error occurred",
+    "signedOut": "Signed out",
+    "signedOutSuccess": "You have been successfully logged out",
+    "signOutFailed": "Failed to sign out"
+  },
+  "dashboard": {
+    "title": "Business POS Dashboard",
+    "description": "Select a dashboard to manage your business operations",
+    "inventory": {
+      "title": "Inventory Dashboard",
+      "description": "Manage your products, stock levels, and inventory tracking"
+    },
+    "sales": {
+      "title": "Sales Dashboard",
+      "description": "Process sales, manage transactions, and view sales analytics"
+    },
+    "purchase": {
+      "title": "Purchase Dashboard",
+      "description": "Handle supplier orders, track purchases, and manage vendors"
+    },
+    "finance": {
+      "title": "Finance Dashboard",
+      "description": "View financial reports, profits, and business analytics"
+    }
+  },
+  "sales": {
+    "title": "Sales Dashboard",
+    "description": "Choose a sales module to manage your transactions and customer data",
+    "cart": {
+      "title": "Sales Cart",
+      "description": "Process new sales transactions and manage customer orders"
+    },
+    "transactions": {
+      "title": "Transaction History",
+      "description": "View and manage past sales transactions and receipts"
+    },
+    "analytics": {
+      "title": "Sales Analytics",
+      "description": "Analyze sales performance, trends, and customer insights"
+    },
+    "customers": {
+      "title": "Customer Management",
+      "description": "Manage customer information and purchase history"
+    },
+    "cartTitle": "Sales Cart",
+    "cartEmpty": "Your cart is empty",
+    "selectProducts": "Select Products",
+    "checkout": "Checkout",
+    "processTransaction": "Process Transaction",
+    "transactionProcessed": "Sale completed for ${{amount}}",
+    "cartItems": "{{count}} items",
+    "failedToLoadProducts": "Failed to load products",
+    "productAddedToCart": "{{name}} added to cart",
+    "itemRemoved": "Item removed",
+    "productRemovedFromCart": "Product removed from cart",
+    "cartIsEmpty": "Cart is empty",
+    "enterCustomerName": "Please enter customer name",
+    "failedToProcessTransaction": "Failed to process transaction",
+    "each": "each"
+  },
+  "inventory": {
+    "title": "Inventory Management",
+    "description": "Manage your products and stock levels",
+    "addProduct": "Add New Product",
+    "editProduct": "Edit Product",
+    "productName": "Product Name",
+    "productPrice": "Price ($)",
+    "productQuantity": "Quantity",
+    "addProductButton": "Add Product",
+    "updateProductButton": "Update Product",
+    "productAdded": "Product added successfully",
+    "productUpdated": "Product updated successfully",
+    "productDeleted": "Product deleted successfully",
+    "noProducts": "No products found",
+    "productsCount": "{{count}} products",
+    "failedToLoadProducts": "Failed to load products",
+    "pleaseFillAllFields": "Please fill in all fields",
+    "pleaseEnterValidPrice": "Please enter a valid price",
+    "pleaseEnterValidQuantity": "Please enter a valid quantity",
+    "failedToSaveProduct": "Failed to save product",
+    "failedToDeleteProduct": "Failed to delete product",
+    "productInventory": "Product Inventory",
+    "adding": "Adding..."
+  },
+  "comingSoon": "This module is coming soon!",
+  "backToDashboard": "← Back to Dashboard"
+}

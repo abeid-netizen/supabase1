@@ -6,7 +6,7 @@ import {
   ShoppingBag, 
   DollarSign 
 } from "lucide-react";
-import { InventoryDashboard } from "@/pages/InventoryDashboard";
+import { useTranslation } from "react-i18next";
 
 interface DashboardProps {
   username: string;
@@ -15,29 +15,31 @@ interface DashboardProps {
 }
 
 export const Dashboard = ({ username, onNavigate, onLogout }: DashboardProps) => {
+  const { t } = useTranslation();
+  
   const dashboards = [
     {
       id: "inventory",
-      title: "Inventory Dashboard",
-      description: "Manage your products, stock levels, and inventory tracking",
+      title: t("dashboard.inventory.title"),
+      description: t("dashboard.inventory.description"),
       icon: Package,
     },
     {
       id: "sales",
-      title: "Sales Dashboard",
-      description: "Process sales, manage transactions, and view sales analytics",
+      title: t("dashboard.sales.title"),
+      description: t("dashboard.sales.description"),
       icon: ShoppingCart,
     },
     {
       id: "purchase",
-      title: "Purchase Dashboard",
-      description: "Handle supplier orders, track purchases, and manage vendors",
+      title: t("dashboard.purchase.title"),
+      description: t("dashboard.purchase.description"),
       icon: ShoppingBag,
     },
     {
       id: "finance",
-      title: "Finance Dashboard",
-      description: "View financial reports, profits, and business analytics",
+      title: t("dashboard.finance.title"),
+      description: t("dashboard.finance.description"),
       icon: DollarSign,
     },
   ];
@@ -45,16 +47,16 @@ export const Dashboard = ({ username, onNavigate, onLogout }: DashboardProps) =>
   return (
     <div className="min-h-screen bg-background">
       <Navigation 
-        title="Business POS Dashboard" 
+        title={t("dashboard.title")} 
         onLogout={onLogout} 
         username={username}
       />
       
       <main className="container mx-auto p-6">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">Welcome back, {username}!</h2>
+          <h2 className="text-3xl font-bold mb-2">{t("common.welcome", { name: username })}</h2>
           <p className="text-muted-foreground">
-            Select a dashboard to manage your business operations
+            {t("dashboard.description")}
           </p>
         </div>
         

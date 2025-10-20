@@ -6,6 +6,7 @@ import {
   BarChart3, 
   Users 
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface SalesDashboardProps {
   username: string;
@@ -15,29 +16,31 @@ interface SalesDashboardProps {
 }
 
 export const SalesDashboard = ({ username, onBack, onLogout, onNavigate }: SalesDashboardProps) => {
+  const { t } = useTranslation();
+  
   const salesModules = [
     {
       id: "cart",
-      title: "Sales Cart",
-      description: "Process new sales transactions and manage customer orders",
+      title: t("sales.cart.title"),
+      description: t("sales.cart.description"),
       icon: Calculator,
     },
     {
       id: "transactions",
-      title: "Transaction History",
-      description: "View and manage past sales transactions and receipts",
+      title: t("sales.transactions.title"),
+      description: t("sales.transactions.description"),
       icon: Receipt,
     },
     {
       id: "analytics",
-      title: "Sales Analytics",
-      description: "Analyze sales performance, trends, and customer insights",
+      title: t("sales.analytics.title"),
+      description: t("sales.analytics.description"),
       icon: BarChart3,
     },
     {
       id: "customers",
-      title: "Customer Management",
-      description: "Manage customer information and purchase history",
+      title: t("sales.customers.title"),
+      description: t("sales.customers.description"),
       icon: Users,
     },
   ];
@@ -45,7 +48,7 @@ export const SalesDashboard = ({ username, onBack, onLogout, onNavigate }: Sales
   return (
     <div className="min-h-screen bg-background">
       <Navigation 
-        title="Sales Dashboard" 
+        title={t("sales.title")} 
         onBack={onBack}
         onLogout={onLogout} 
         username={username}
@@ -53,9 +56,9 @@ export const SalesDashboard = ({ username, onBack, onLogout, onNavigate }: Sales
       
       <main className="container mx-auto p-6">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">Sales Management</h2>
+          <h2 className="text-3xl font-bold mb-2">{t("sales.title")}</h2>
           <p className="text-muted-foreground">
-            Choose a sales module to manage your transactions and customer data
+            {t("sales.description")}
           </p>
         </div>
         

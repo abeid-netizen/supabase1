@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, LogOut, User } from "lucide-react";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 interface NavigationProps {
   title: string;
@@ -23,6 +24,7 @@ export const Navigation = ({ title, onBack, onLogout, username }: NavigationProp
         </div>
         
         <div className="flex items-center space-x-4">
+          <LanguageSelector />
           {username && (
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <User className="h-4 w-4" />

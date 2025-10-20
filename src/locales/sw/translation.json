@@ -1,0 +1,118 @@
+{
+  "common": {
+    "welcome": "Karibu tena, {{name}}!",
+    "logout": "Toka",
+    "back": "Rudi",
+    "cancel": "Ghairi",
+    "save": "Hifadhi",
+    "delete": "Futa",
+    "edit": "Hariri",
+    "add": "Ongeza",
+    "remove": "Ondoa",
+    "total": "Jumla",
+    "quantity": "Kiasi",
+    "price": "Bei",
+    "name": "Jina",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "customerName": "Jina la Mteja",
+    "signIn": "Ingia",
+    "signingIn": "Inaingia...",
+    "processing": "Inachakata...",
+    "success": "Mafanikio",
+    "error": "Hitilafu"
+  },
+  "auth": {
+    "title": "Mfumo wa POS",
+    "description": "Ingia ili kufikia dashibodi yako ya biashara",
+    "usernamePlaceholder": "Ingiza barua pepe yako",
+    "passwordPlaceholder": "Ingiza nenosiri lako",
+    "missingFields": "Tafadhali jaza sehemu zote",
+    "signInFailed": "Imeshindwa kuingia",
+    "unexpectedError": "Hitilafu isiyotarajiwa imetokea",
+    "signedOut": "Umetoka",
+    "signedOutSuccess": "Umetoka kwa mafanikio",
+    "signOutFailed": "Imeshindwa kutoka"
+  },
+  "dashboard": {
+    "title": "Dashibodi ya Mfumo wa POS",
+    "description": "Chagua dashibodi ya kusimamia shughuli zako za biashara",
+    "inventory": {
+      "title": "Dashibodi ya Malipo",
+      "description": "Simamia bidhaa zako, viwango vya hisa, na ufuatiliaji wa malipo"
+    },
+    "sales": {
+      "title": "Dashibodi ya Mauzo",
+      "description": "Shughulikia mauzo, simamia miamala, na angalia takwimu za mauzo"
+    },
+    "purchase": {
+      "title": "Dashibodi ya Ununuzi",
+      "description": "Shughulikia maagizo ya wauzaji, fuatilia ununuzi, na simamia wauzaji"
+    },
+    "finance": {
+      "title": "Dashibodi ya Fedha",
+      "description": "Angalia ripoti za kifedha, faida, na takwimu za biashara"
+    }
+  },
+  "sales": {
+    "title": "Dashibodi ya Mauzo",
+    "description": "Chagua moduli ya mauzo ili kusimamia miamala yako na data ya wateja",
+    "cart": {
+      "title": "Kikapu cha Mauzo",
+      "description": "Shughulikia miamala mipya ya mauzo na simamia maagizo ya wateja"
+    },
+    "transactions": {
+      "title": "Historia ya Miamala",
+      "description": "Angalia na simamia miamala ya zamani ya mauzo na risiti"
+    },
+    "analytics": {
+      "title": "Takwimu za Mauzo",
+      "description": "Changanua utendaji wa mauzo, mwenendo, na maarifa ya wateja"
+    },
+    "customers": {
+      "title": "Usimamizi wa Wateja",
+      "description": "Simamia maelezo ya wateja na historia ya ununuzi"
+    },
+    "cartTitle": "Kikapu cha Mauzo",
+    "cartEmpty": "Kikapu chako kimefungwa",
+    "selectProducts": "Chagua Bidhaa",
+    "checkout": "Malipo",
+    "processTransaction": "Shughulikia Muamala",
+    "transactionProcessed": "Uuzaji umekamilika kwa ${{amount}}",
+    "cartItems": "Vipengee {{count}}",
+    "failedToLoadProducts": "Imeshindwa kupakia bidhaa",
+    "productAddedToCart": "{{name}} imeongezwa kikapuni",
+    "itemRemoved": "Kipengee kimeondolewa",
+    "productRemovedFromCart": "Bidhaa imeondolewa kikapuni",
+    "cartIsEmpty": "Kikapu kimefungwa",
+    "enterCustomerName": "Tafadhali ingiza jina la mteja",
+    "failedToProcessTransaction": "Imeshindwa kushughulikia muamala",
+    "each": "kila"
+  },
+  "inventory": {
+    "title": "Usimamizi wa Malipo",
+    "description": "Simamia bidhaa zako na viwango vya hisa",
+    "addProduct": "Ongeza Bidhaa Mpya",
+    "editProduct": "Hariri Bidhaa",
+    "productName": "Jina la Bidhaa",
+    "productPrice": "Bei ($)",
+    "productQuantity": "Kiasi",
+    "addProductButton": "Ongeza Bidhaa",
+    "updateProductButton": "Sasisha Bidhaa",
+    "productAdded": "Bidhaa imeongezwa kwa mafanikio",
+    "productUpdated": "Bidhaa imesasishwa kwa mafanikio",
+    "productDeleted": "Bidhaa imefutwa kwa mafanikio",
+    "noProducts": "Hakuna bidhaa zilizopatikana",
+    "productsCount": "Bidhaa {{count}}",
+    "failedToLoadProducts": "Imeshindwa kupakia bidhaa",
+    "pleaseFillAllFields": "Tafadhali jaza sehemu zote",
+    "pleaseEnterValidPrice": "Tafadhali ingiza bei sahihi",
+    "pleaseEnterValidQuantity": "Tafadhali ingiza kiasi sahihi",
+    "failedToSaveProduct": "Imeshindwa kuhifadhi bidhaa",
+    "failedToDeleteProduct": "Imeshindwa kufuta bidhaa",
+    "productInventory": "Malipo ya Bidhaa",
+    "adding": "Inaongeza..."
+  },
+  "comingSoon": "Moduli hii inakuja hivi karibuni!",
+  "backToDashboard": "← Rudi kwa Dashibodi"
+}

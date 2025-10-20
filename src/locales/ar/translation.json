@@ -1,0 +1,118 @@
+{
+  "common": {
+    "welcome": "مرحباً بك مرة أخرى، {{name}}!",
+    "logout": "تسجيل الخروج",
+    "back": "رجوع",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "total": "الإجمالي",
+    "quantity": "الكمية",
+    "price": "السعر",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "customerName": "اسم العميل",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جاري تسجيل الدخول...",
+    "processing": "قيد المعالجة...",
+    "success": "نجاح",
+    "error": "خطأ"
+  },
+  "auth": {
+    "title": "نظام نقطة البيع",
+    "description": "سجل دخولك للوصول إلى لوحة التحكم الخاصة بك",
+    "usernamePlaceholder": "أدخل بريدك الإلكتروني",
+    "passwordPlaceholder": "أدخل كلمة المرور الخاصة بك",
+    "missingFields": "يرجى ملء جميع الحقول",
+    "signInFailed": "فشل تسجيل الدخول",
+    "unexpectedError": "حدث خطأ غير متوقع",
+    "signedOut": "تم تسجيل الخروج",
+    "signedOutSuccess": "لقد تم تسجيل خروجك بنجاح",
+    "signOutFailed": "فشل تسجيل الخروج"
+  },
+  "dashboard": {
+    "title": "لوحة تحكم نظام نقطة البيع",
+    "description": "اختر لوحة تحكم لإدارة عمليات عملك",
+    "inventory": {
+      "title": "لوحة تحكم المخزون",
+      "description": "إدارة منتجاتك، مستويات المخزون، وتتبع المخزون"
+    },
+    "sales": {
+      "title": "لوحة تحكم المبيعات",
+      "description": "معالجة المبيعات، إدارة المعاملات، وعرض تحليلات المبيعات"
+    },
+    "purchase": {
+      "title": "لوحة تحكم المشتريات",
+      "description": "التعامل مع طلبات الموردين، تتبع المشتريات، وإدارة الموردين"
+    },
+    "finance": {
+      "title": "لوحة تحكم المالية",
+      "description": "عرض التقارير المالية، الأرباح، والتحليلات التجارية"
+    }
+  },
+  "sales": {
+    "title": "لوحة تحكم المبيعات",
+    "description": "اختر وحدة المبيعات لإدارة معاملاتك وبيانات العملاء",
+    "cart": {
+      "title": "عربة المبيعات",
+      "description": "معالجة معاملات المبيعات الجديدة وإدارة طلبات العملاء"
+    },
+    "transactions": {
+      "title": "سجل المعاملات",
+      "description": "عرض وإدارة معاملات المبيعات السابقة والإيصالات"
+    },
+    "analytics": {
+      "title": "تحليلات المبيعات",
+      "description": "تحليل أداء المبيعات، الاتجاهات، والرؤى حول العملاء"
+    },
+    "customers": {
+      "title": "إدارة العملاء",
+      "description": "إدارة معلومات العملاء وسجل المشتريات"
+    },
+    "cartTitle": "عربة المبيعات",
+    "cartEmpty": "عربة التسوق فارغة",
+    "selectProducts": "اختر المنتجات",
+    "checkout": "الدفع",
+    "processTransaction": "معالجة المعاملة",
+    "transactionProcessed": "اكتملت البيع بقيمة ${{amount}}",
+    "cartItems": "{{count}} عناصر",
+    "failedToLoadProducts": "فشل تحميل المنتجات",
+    "productAddedToCart": "تمت إضافة {{name}} إلى عربة التسوق",
+    "itemRemoved": "تمت إزالة العنصر",
+    "productRemovedFromCart": "تمت إزالة المنتج من عربة التسوق",
+    "cartIsEmpty": "عربة التسوق فارغة",
+    "enterCustomerName": "يرجى إدخال اسم العميل",
+    "failedToProcessTransaction": "فشل معالجة المعاملة",
+    "each": "كل"
+  },
+  "inventory": {
+    "title": "إدارة المخزون",
+    "description": "إدارة منتجاتك ومستويات المخزون",
+    "addProduct": "إضافة منتج جديد",
+    "editProduct": "تعديل المنتج",
+    "productName": "اسم المنتج",
+    "productPrice": "السعر ($)",
+    "productQuantity": "الكمية",
+    "addProductButton": "إضافة منتج",
+    "updateProductButton": "تحديث المنتج",
+    "productAdded": "تمت إضافة المنتج بنجاح",
+    "productUpdated": "تم تحديث المنتج بنجاح",
+    "productDeleted": "تم حذف المنتج بنجاح",
+    "noProducts": "لم يتم العثور على منتجات",
+    "productsCount": "{{count}} منتجات",
+    "failedToLoadProducts": "فشل تحميل المنتجات",
+    "pleaseFillAllFields": "يرجى ملء جميع الحقول",
+    "pleaseEnterValidPrice": "يرجى إدخال سعر صحيح",
+    "pleaseEnterValidQuantity": "يرجى إدخال كمية صحيحة",
+    "failedToSaveProduct": "فشل حفظ المنتج",
+    "failedToDeleteProduct": "فشل حذف المنتج",
+    "productInventory": "مخزون المنتجات",
+    "adding": "قيد الإضافة..."
+  },
+  "comingSoon": "هذه الوحدة قادمة قريباً!",
+  "backToDashboard": "← العودة إلى لوحة التحكم"
+}

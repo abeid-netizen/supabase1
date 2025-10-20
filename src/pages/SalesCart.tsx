@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { productService, transactionService, Product, TransactionItem } from "@/services/productService";
+import { useTranslation } from "react-i18next";
 
 interface CartItem extends Product {
   quantity: number;
@@ -25,6 +26,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
   const [customerName, setCustomerName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   // Load products from Supabase
   useEffect(() => {
@@ -37,8 +39,8 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
       setProducts(data);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load products",
+        title: t("common.error"),
+        description: t("sales.failedToLoadProducts"),
         variant: "destructive",
       });
     }
@@ -58,8 +60,8 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
     }
     
     toast({
-      title: "Added to cart",
-      description: `${product.name} added to cart`,
+      title: t("common.success"),
+      description: t("sales.productAddedToCart", { name: product.name }),
     });
   };
 
@@ -76,8 +78,8 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
   const removeItem = (id: string) => {
     setCart(cart.filter(item => item.id !== id));
     toast({
-      title: "Item removed",
-      description: "Product removed from cart",
+      title: t("sales.itemRemoved"),
+      description: t("sales.productRemovedFromCart"),
     });
   };
 
@@ -88,8 +90,8 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
   const processTransaction = async () => {
     if (cart.length === 0) {
       toast({
-        title: "Error",
-        description: "Cart is empty",
+        title: t("common.error"),
+        description: t("sales.cartIsEmpty"),
         variant: "destructive",
       });
       return;
@@ -97,8 +99,8 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
 
     if (!customerName) {
       toast({
-        title: "Error",
-        description: "Please enter customer name",
+        title: t("common.error"),
+        description: t("sales.enterCustomerName"),
         variant: "destructive",
       });
       return;
@@ -120,16 +122,16 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
       });
 
       toast({
-        title: "Transaction Processed",
-        description: `Sale completed for $${getTotalAmount().toFixed(2)}`,
+        title: t("common.success"),
+        description: t("sales.transactionProcessed", { amount: getTotalAmount().toFixed(2) }),
       });
       
       setCart([]);
       setCustomerName("");
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "Failed to process transaction",
+        title: t("common.error"),
+        description: error.message || t("sales.failedToProcessTransaction"),
         variant: "destructive",
       });
     } finally {
@@ -140,7 +142,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation 
-        title="Sales Cart" 
+        title={t("sales.cartTitle")} 
         onBack={onBack}
         onLogout={onLogout} 
         username={username}
@@ -153,7 +155,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Plus className="h-5 w-5" />
-                Select Products
+                {t("sales.selectProducts")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -170,7 +172,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                           size="sm" 
                           onClick={() => addToCart(product)}
                         >
-                          Add
+                          {t("common.add")}
                         </Button>
                       </div>
                     </CardContent>
@@ -187,10 +189,10 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ShoppingCart className="h-5 w-5" />
-                    Shopping Cart
+                    {t("sales.cartTitle")}
                   </div>
                   <Badge variant="secondary">
-                    {cart.length} items
+                    {t("sales.cartItems", { count: cart.length })}
                   </Badge>
                 </CardTitle>
               </CardHeader>
@@ -198,7 +200,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                 {cart.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <ShoppingCart className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Your cart is empty</p>
+                    <p>{t("sales.cartEmpty")}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -207,7 +209,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                         <div className="flex-1">
                           <h4 className="font-medium">{item.name}</h4>
                           <p className="text-sm text-muted-foreground">
-                            ${item.price.toFixed(2)} each
+                            ${item.price.toFixed(2)} {t("common.each")}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -244,13 +246,13 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
             {/* Checkout Section */}
             <Card>
               <CardHeader>
-                <CardTitle>Checkout</CardTitle>
+                <CardTitle>{t("sales.checkout")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium">Customer Name</label>
+                  <label className="text-sm font-medium">{t("common.customerName")}</label>
                   <Input
-                    placeholder="Enter customer name"
+                    placeholder={t("common.customerName")}
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                   />
@@ -259,7 +261,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                 <Separator />
                 
                 <div className="flex justify-between items-center font-semibold text-lg">
-                  <span>Total:</span>
+                  <span>{t("common.total")}:</span>
                   <span>${getTotalAmount().toFixed(2)}</span>
                 </div>
                 
@@ -269,7 +271,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                   size="lg"
                   disabled={isLoading || cart.length === 0}
                 >
-                  {isLoading ? "Processing..." : "Process Transaction"}
+                  {isLoading ? t("common.processing") : t("sales.processTransaction")}
                 </Button>
               </CardContent>
             </Card>

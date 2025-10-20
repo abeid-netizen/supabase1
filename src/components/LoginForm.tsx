@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Building2, Lock, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { authService, UserCredentials } from "@/services/authService";
+import { useTranslation } from "react-i18next";
 
 interface LoginFormProps {
   onLogin: (user: any) => void;
@@ -16,14 +17,15 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !password) {
       toast({
-        title: "Error",
-        description: "Please fill in all fields",
+        title: t("common.error"),
+        description: t("auth.missingFields"),
         variant: "destructive",
       });
       return;
@@ -37,8 +39,8 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
       
       if (error) {
         toast({
-          title: "Error",
-          description: error.message || "Failed to sign in",
+          title: t("common.error"),
+          description: error.message || t("auth.signInFailed"),
           variant: "destructive",
         });
         setIsLoading(false);
@@ -48,8 +50,8 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
       onLogin(user);
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "An unexpected error occurred",
+        title: t("common.error"),
+        description: error.message || t("auth.unexpectedError"),
         variant: "destructive",
       });
       setIsLoading(false);
@@ -63,21 +65,21 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary">
             <Building2 className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-bold">Business POS</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t("auth.title")}</CardTitle>
           <CardDescription>
-            Sign in to access your business dashboard
+            {t("auth.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("common.email")}</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("auth.usernamePlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
@@ -85,13 +87,13 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("common.password")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t("auth.passwordPlaceholder")}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10"
@@ -103,7 +105,7 @@ export const LoginForm = ({ onLogin }: LoginFormProps) => {
               className="w-full" 
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? t("common.signingIn") : t("common.signIn")}
             </Button>
           </form>
         </CardContent>

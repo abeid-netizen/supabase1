@@ -6,6 +6,7 @@ import { SalesCart } from "@/pages/SalesCart";
 import { InventoryDashboard } from "@/pages/InventoryDashboard";
 import { authService } from "@/services/authService";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "inventory" | "inventory-dashboard" | "purchase" | "finance";
 
@@ -13,6 +14,7 @@ const Index = () => {
   const [currentView, setCurrentView] = useState<ViewState>("login");
   const [user, setUser] = useState<any | null>(null);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   // Check if user is already logged in
   useEffect(() => {
@@ -31,8 +33,8 @@ const Index = () => {
     setUser(user);
     setCurrentView("dashboard");
     toast({
-      title: "Welcome!",
-      description: `You're logged in as ${user.email}`,
+      title: t("common.success"),
+      description: t("common.welcome", { name: user.email }),
     });
   };
 
@@ -42,13 +44,13 @@ const Index = () => {
       setUser(null);
       setCurrentView("login");
       toast({
-        title: "Signed out",
-        description: "You have been successfully logged out",
+        title: t("auth.signedOut"),
+        description: t("auth.signedOutSuccess"),
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "Failed to sign out",
+        title: t("common.error"),
+        description: t("auth.signOutFailed"),
         variant: "destructive",
       });
     }
@@ -138,14 +140,18 @@ const Index = () => {
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">
-              {currentView.charAt(0).toUpperCase() + currentView.slice(1)} Dashboard
+              {t(`dashboard.${currentView}.title`) || 
+               t("comingSoon")}
             </h1>
-            <p className="text-muted-foreground mb-4">This module is coming soon!</p>
+            <p className="text-muted-foreground mb-4">
+              {t(`dashboard.${currentView}.description`) || 
+               t("comingSoon")}
+            </p>
             <button 
               onClick={handleBack}
               className="text-primary hover:underline"
             >
-              ← Back to Dashboard
+              {t("backToDashboard")}
             </button>
           </div>
         </div>
