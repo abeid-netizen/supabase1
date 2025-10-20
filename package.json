@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "setup:supabase": "node scripts/setup-supabase.js",
     "verify:deployment": "node scripts/verify-deployment.js",
-    "deploy:netlify": "node scripts/deploy-netlify.js"
+    "deploy:netlify": "node scripts/deploy-netlify.js",
+    "verify:deployment-status": "node scripts/verify-deployment-status.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
