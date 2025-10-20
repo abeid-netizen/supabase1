@@ -55,6 +55,56 @@ export interface CashFlowData {
   closingCash: number;
 }
 
+// Enhanced interfaces for real-world POS
+export interface Category {
+  id?: string;
+  name: string;
+  description?: string;
+  created_at?: string;
+}
+
+export interface Supplier {
+  id?: string;
+  name: string;
+  contact_person?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  created_at?: string;
+}
+
+export interface Customer {
+  id?: string;
+  name: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  loyalty_points?: number;
+  created_at?: string;
+}
+
+export interface Employee {
+  id?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  salary?: number;
+  hire_date?: string;
+  is_active?: boolean;
+  created_at?: string;
+}
+
+export interface Expense {
+  id?: string;
+  description: string;
+  amount: number;
+  category?: string;
+  payment_method?: string;
+  receipt_url?: string;
+  created_at?: string;
+}
+
 export const productService = {
   async getProducts() {
     try {
@@ -357,6 +407,369 @@ export const financialService = {
     } catch (error) {
       console.error('Error fetching cash flow:', error);
       throw error;
+    }
+  }
+}
+
+export const categoryService = {
+  async getCategories() {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name')
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+      throw error
+    }
+  },
+
+  async addCategory(category: Omit<Category, 'id' | 'created_at'>) {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .insert([category])
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error adding category:', error)
+      throw error
+    }
+  }
+}
+
+export const supplierService = {
+  async getSuppliers() {
+    try {
+      const { data, error } = await supabase
+        .from('suppliers')
+        .select('*')
+        .order('name')
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching suppliers:', error)
+      throw error
+    }
+  },
+
+  async addSupplier(supplier: Omit<Supplier, 'id' | 'created_at'>) {
+    try {
+      const { data, error } = await supabase
+        .from('suppliers')
+        .insert([supplier])
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error adding supplier:', error)
+      throw error
+    }
+  }
+}
+
+export const customerService = {
+  async getCustomers() {
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .select('*')
+        .order('name')
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching customers:', error)
+      throw error
+    }
+  },
+
+  async addCustomer(customer: Omit<Customer, 'id' | 'created_at' | 'loyalty_points'>) {
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .insert([{ ...customer, loyalty_points: 0 }])
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error adding customer:', error)
+      throw error
+    }
+  },
+
+  async updateCustomerLoyaltyPoints(customerId: string, points: number) {
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .update({ loyalty_points: points })
+        .eq('id', customerId)
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error updating customer loyalty points:', error)
+      throw error
+    }
+  }
+}
+
+export const employeeService = {
+  async getEmployees() {
+    try {
+      const { data, error } = await supabase
+        .from('employees')
+        .select('*')
+        .order('name')
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching employees:', error)
+      throw error
+    }
+  },
+
+  async addEmployee(employee: Omit<Employee, 'id' | 'created_at' | 'is_active'>) {
+    try {
+      const { data, error } = await supabase
+        .from('employees')
+        .insert([{ ...employee, is_active: true }])
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error adding employee:', error)
+      throw error
+    }
+  }
+}
+
+export const expenseService = {
+  async getExpenses() {
+    try {
+      const { data, error } = await supabase
+        .from('expenses')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching expenses:', error)
+      throw error
+    }
+  },
+
+  async addExpense(expense: Omit<Expense, 'id' | 'created_at'>) {
+    try {
+      const { data, error } = await supabase
+        .from('expenses')
+        .insert([expense])
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error adding expense:', error)
+      throw error
+    }
+  }
+}
+
+// Enhanced product service with category and supplier support
+export const enhancedProductService = {
+  async getProducts() {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories(name),
+          suppliers(name)
+        `)
+        .order('name')
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      throw error
+    }
+  },
+
+  async addProduct(product: Omit<Product, 'id' | 'created_at'>) {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .insert([product])
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error adding product:', error)
+      throw error
+    }
+  },
+
+  async updateProduct(id: string, updates: Partial<Product>) {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .update(updates)
+        .eq('id', id)
+        .select()
+
+      if (error) throw error
+      return data[0]
+    } catch (error) {
+      console.error('Error updating product:', error)
+      throw error
+    }
+  },
+
+  async deleteProduct(id: string) {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id)
+
+      if (error) throw error
+    } catch (error) {
+      console.error('Error deleting product:', error)
+      throw error
+    }
+  },
+
+  async getLowStockProducts(threshold: number = 5) {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .lt('quantity', threshold)
+        .order('quantity')
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching low stock products:', error)
+      throw error
+    }
+  }
+}
+
+// Enhanced transaction service with customer support
+export const enhancedTransactionService = {
+  async getTransactions() {
+    try {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select(`
+          *,
+          customers(name),
+          transaction_items(*)
+        `)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error fetching transactions:', error)
+      throw error
+    }
+  },
+
+  async addTransaction(transaction: Omit<Transaction, 'id' | 'created_at' | 'reference_number'>) {
+    try {
+      // Generate a unique reference number
+      const referenceNumber = `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      
+      // Insert the main transaction
+      const { data: transactionData, error: transactionError } = await supabase
+        .from('transactions')
+        .insert([{
+          ...transaction,
+          reference_number: referenceNumber
+        }])
+        .select()
+
+      if (transactionError) throw transactionError
+
+      return transactionData[0]
+    } catch (error) {
+      console.error('Error adding transaction:', error)
+      throw error
+    }
+  },
+
+  async addTransactionWithItems(transaction: any, items: TransactionItem[]) {
+    try {
+      // Start a Supabase transaction
+      const referenceNumber = `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      
+      // Insert the main transaction
+      const { data: transactionData, error: transactionError } = await supabase
+        .from('transactions')
+        .insert([{
+          ...transaction,
+          reference_number: referenceNumber
+        }])
+        .select()
+
+      if (transactionError) throw transactionError
+
+      const transactionId = transactionData[0].id
+
+      // Insert transaction items
+      const itemsWithTransactionId = items.map(item => ({
+        transaction_id: transactionId,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        unit_price: item.price,
+        total_price: item.quantity * item.price
+      }))
+
+      const { error: itemsError } = await supabase
+        .from('transaction_items')
+        .insert(itemsWithTransactionId)
+
+      if (itemsError) throw itemsError
+
+      // Update product quantities
+      for (const item of items) {
+        const { data: productData, error: productError } = await supabase
+          .from('products')
+          .select('quantity')
+          .eq('id', item.product_id)
+          .single()
+
+        if (productError) throw productError
+
+        const newQuantity = productData.quantity - item.quantity
+        const { error: updateError } = await supabase
+          .from('products')
+          .update({ quantity: newQuantity })
+          .eq('id', item.product_id)
+
+        if (updateError) throw updateError
+      }
+
+      return transactionData[0]
+    } catch (error) {
+      console.error('Error adding transaction with items:', error)
+      throw error
     }
   }
 }

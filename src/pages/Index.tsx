@@ -5,11 +5,13 @@ import { SalesDashboard } from "@/pages/SalesDashboard";
 import { SalesCart } from "@/pages/SalesCart";
 import { InventoryDashboard } from "@/pages/InventoryDashboard";
 import { FinanceDashboard } from "@/pages/FinanceDashboard";
+import { SalesPOS } from "@/pages/SalesPOS";
+import { CustomerManagement } from "@/pages/CustomerManagement";
 import { authService } from "@/services/authService";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 
-type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "inventory" | "inventory-dashboard" | "purchase" | "finance" | "finance-dashboard";
+type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "sales-pos" | "inventory" | "inventory-dashboard" | "purchase" | "finance" | "finance-dashboard" | "customers";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewState>("login");
@@ -65,11 +67,17 @@ const Index = () => {
       case "cart":
         setCurrentView("sales-cart");
         break;
+      case "pos":
+        setCurrentView("sales-pos");
+        break;
       case "inventory":
         setCurrentView("inventory-dashboard");
         break;
       case "finance":
         setCurrentView("finance-dashboard");
+        break;
+      case "customers":
+        setCurrentView("customers");
         break;
       case "purchase":
         // This will be implemented later
@@ -88,11 +96,17 @@ const Index = () => {
       case "sales-cart":
         setCurrentView("sales");
         break;
+      case "sales-pos":
+        setCurrentView("sales");
+        break;
       case "inventory-dashboard":
         setCurrentView("dashboard");
         break;
       case "finance-dashboard":
         setCurrentView("dashboard");
+        break;
+      case "customers":
+        setCurrentView("sales");
         break;
       default:
         setCurrentView("dashboard");
@@ -133,6 +147,14 @@ const Index = () => {
           onLogout={handleLogout}
         />
       );
+    case "sales-pos":
+      return (
+        <SalesPOS
+          username={user.email}
+          onBack={handleBack}
+          onLogout={handleLogout}
+        />
+      );
     case "inventory-dashboard":
       return (
         <InventoryDashboard
@@ -144,6 +166,14 @@ const Index = () => {
     case "finance-dashboard":
       return (
         <FinanceDashboard
+          username={user.email}
+          onBack={handleBack}
+          onLogout={handleLogout}
+        />
+      );
+    case "customers":
+      return (
+        <CustomerManagement
           username={user.email}
           onBack={handleBack}
           onLogout={handleLogout}

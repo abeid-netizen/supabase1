@@ -4,7 +4,8 @@ import {
   Calculator, 
   Receipt, 
   BarChart3, 
-  Users 
+  Users,
+  ShoppingCart
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -19,6 +20,12 @@ export const SalesDashboard = ({ username, onBack, onLogout, onNavigate }: Sales
   const { t } = useTranslation();
   
   const salesModules = [
+    {
+      id: "pos",
+      title: t("sales.posTitle"),
+      description: t("sales.posDescription", "Process sales transactions in real-time with barcode scanning and customer management"),
+      icon: ShoppingCart,
+    },
     {
       id: "cart",
       title: t("sales.cart.title"),
