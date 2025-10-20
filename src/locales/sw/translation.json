@@ -81,7 +81,8 @@
       "retainedEarnings": "Mapato Yaliyobaki",
       "currentLiabilities": "Madai ya Sasa",
       "totalEquityLiabilities": "Jumla ya Haki na Madai",
-      "pdfExportNotImplemented": "Utendaji wa kuhamisha PDF utatekelezwa hapa"
+      "pdfExportNotImplemented": "Utendaji wa kuhamisha PDF utatekelezwa hapa",
+      "loadingData": "Inapakia data za kifedha..."
     }
   },
   "sales": {

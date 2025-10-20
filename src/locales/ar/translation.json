@@ -81,7 +81,8 @@
       "retainedEarnings": "الأرباح المحتجزة",
       "currentLiabilities": "الالتزامات المتداولة",
       "totalEquityLiabilities": "إجمالي حقوق الملكية والالتزامات",
-      "pdfExportNotImplemented": "سيتم تنفيذ وظيفة تصدير PDF هنا"
+      "pdfExportNotImplemented": "سيتم تنفيذ وظيفة تصدير PDF هنا",
+      "loadingData": "جارٍ تحميل البيانات المالية..."
     }
   },
   "sales": {

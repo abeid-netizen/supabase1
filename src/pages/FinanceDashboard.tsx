@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,11 +21,13 @@ import {
   TrendingUp, 
   ShoppingCart, 
   Wallet,
-  FileText
+  FileText,
+  Loader2
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { formatCurrency } from "@/lib/currency";
 import { generateHTMLReport, printReport } from "@/lib/reportGenerator";
+import { financialService, FinancialReportData, BalanceSheetData as ServiceBalanceSheetData, CashFlowData as ServiceCashFlowData } from "@/services/productService";
 
 // Types for our financial data
 interface FinancialData {
@@ -107,11 +109,50 @@ interface FinanceDashboardProps {
 
 export const FinanceDashboard = ({ username, onBack, onLogout }: FinanceDashboardProps) => {
   const [timeRange, setTimeRange] = useState<"day" | "week" | "month" | "year">("month");
-  const [financialData, setFinancialData] = useState<FinancialData[]>(mockFinancialData);
+  const [financialData, setFinancialData] = useState<FinancialData[]>([]);
+  const [balanceSheetData, setBalanceSheetData] = useState<BalanceSheetData | null>(null);
+  const [cashFlowData, setCashFlowData] = useState<CashFlowData | null>(null);
+  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
+
+  // Fetch real financial data
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [reportData, balanceData, cashData] = await Promise.all([
+          financialService.getFinancialReport(timeRange),
+          financialService.getBalanceSheet(),
+          financialService.getCashFlow()
+        ]);
+        
+        setFinancialData(reportData);
+        setBalanceSheetData(balanceData);
+        setCashFlowData(cashData);
+      } catch (error) {
+        console.error("Error fetching financial data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, [timeRange]);
 
   // Calculate totals based on time range
   const calculateTotals = () => {
+    if (financialData.length === 0) {
+      return {
+        revenue: 0,
+        costOfSales: 0,
+        grossProfit: 0,
+        operatingExpenses: 0,
+        netProfit: 0,
+        taxPaid: 0,
+        drawings: 0
+      };
+    }
+    
     return financialData.reduce((acc, curr) => {
       acc.revenue += curr.revenue;
       acc.costOfSales += curr.costOfSales;
@@ -139,14 +180,27 @@ export const FinanceDashboard = ({ username, onBack, onLogout }: FinanceDashboar
   const netProfitMargin = totals.revenue ? (totals.netProfit / totals.revenue) * 100 : 0;
 
   const handlePrintReport = () => {
-    const htmlReport = generateHTMLReport(financialData, balanceSheetData, cashFlowData);
-    printReport(htmlReport);
+    if (financialData.length > 0 && balanceSheetData && cashFlowData) {
+      const htmlReport = generateHTMLReport(financialData, balanceSheetData, cashFlowData);
+      printReport(htmlReport);
+    }
   };
 
   const handleExportPDF = () => {
     // In a real implementation, this would generate a PDF report
     alert(t("finance.pdfExportNotImplemented"));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p>{t("finance.loadingData")}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -191,7 +245,11 @@ export const FinanceDashboard = ({ username, onBack, onLogout }: FinanceDashboar
               >
                 {t("finance.year")}
               </Button>
-              <Button onClick={handlePrintReport} variant="secondary">
+              <Button 
+                onClick={handlePrintReport} 
+                variant="secondary"
+                disabled={financialData.length === 0 || !balanceSheetData || !cashFlowData}
+              >
                 <FileText className="h-4 w-4 mr-2" />
                 {t("finance.printReport")}
               </Button>
@@ -246,20 +304,22 @@ export const FinanceDashboard = ({ username, onBack, onLogout }: FinanceDashboar
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {t("finance.cashFlow")}
-              </CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(cashFlowData.closingCash)}</div>
-              <p className="text-xs text-muted-foreground">
-                {t("finance.closingCash")}
-              </p>
-            </CardContent>
-          </Card>
+          {cashFlowData && (
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {t("finance.cashFlow")}
+                </CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatCurrency(cashFlowData.closingCash)}</div>
+                <p className="text-xs text-muted-foreground">
+                  {t("finance.closingCash")}
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Charts */}
@@ -370,56 +430,58 @@ export const FinanceDashboard = ({ username, onBack, onLogout }: FinanceDashboar
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("finance.balanceSheet")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium mb-2">{t("finance.assets")}</h3>
-                  <div className="space-y-1 ml-4">
-                    <div className="flex justify-between">
-                      <span>{t("finance.nonCurrentAssets")}</span>
-                      <span>{formatCurrency(balanceSheetData.assets.nonCurrent)}</span>
+          {balanceSheetData && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("finance.balanceSheet")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-medium mb-2">{t("finance.assets")}</h3>
+                    <div className="space-y-1 ml-4">
+                      <div className="flex justify-between">
+                        <span>{t("finance.nonCurrentAssets")}</span>
+                        <span>{formatCurrency(balanceSheetData.assets.nonCurrent)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>{t("finance.currentAssets")}</span>
+                        <span>{formatCurrency(balanceSheetData.assets.current)}</span>
+                      </div>
+                      <div className="border-t"></div>
+                      <div className="flex justify-between font-medium">
+                        <span>{t("finance.totalAssets")}</span>
+                        <span>{formatCurrency(balanceSheetData.assets.total)}</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span>{t("finance.currentAssets")}</span>
-                      <span>{formatCurrency(balanceSheetData.assets.current)}</span>
-                    </div>
-                    <div className="border-t"></div>
-                    <div className="flex justify-between font-medium">
-                      <span>{t("finance.totalAssets")}</span>
-                      <span>{formatCurrency(balanceSheetData.assets.total)}</span>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-2">{t("finance.equityAndLiabilities")}</h3>
+                    <div className="space-y-1 ml-4">
+                      <div className="flex justify-between">
+                        <span>{t("finance.ownersCapital")}</span>
+                        <span>{formatCurrency(balanceSheetData.equityLiabilities.ownersCapital)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>{t("finance.retainedEarnings")}</span>
+                        <span>{formatCurrency(balanceSheetData.equityLiabilities.retainedEarnings)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>{t("finance.currentLiabilities")}</span>
+                        <span>{formatCurrency(balanceSheetData.equityLiabilities.currentLiabilities)}</span>
+                      </div>
+                      <div className="border-t"></div>
+                      <div className="flex justify-between font-medium">
+                        <span>{t("finance.totalEquityLiabilities")}</span>
+                        <span>{formatCurrency(balanceSheetData.equityLiabilities.total)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                
-                <div>
-                  <h3 className="font-medium mb-2">{t("finance.equityAndLiabilities")}</h3>
-                  <div className="space-y-1 ml-4">
-                    <div className="flex justify-between">
-                      <span>{t("finance.ownersCapital")}</span>
-                      <span>{formatCurrency(balanceSheetData.equityLiabilities.ownersCapital)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>{t("finance.retainedEarnings")}</span>
-                      <span>{formatCurrency(balanceSheetData.equityLiabilities.retainedEarnings)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>{t("finance.currentLiabilities")}</span>
-                      <span>{formatCurrency(balanceSheetData.equityLiabilities.currentLiabilities)}</span>
-                    </div>
-                    <div className="border-t"></div>
-                    <div className="flex justify-between font-medium">
-                      <span>{t("finance.totalEquityLiabilities")}</span>
-                      <span>{formatCurrency(balanceSheetData.equityLiabilities.total)}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
     </div>

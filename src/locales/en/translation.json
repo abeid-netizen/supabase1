@@ -81,7 +81,8 @@
       "retainedEarnings": "Retained Earnings",
       "currentLiabilities": "Current Liabilities",
       "totalEquityLiabilities": "Total Equity and Liabilities",
-      "pdfExportNotImplemented": "PDF export functionality would be implemented here"
+      "pdfExportNotImplemented": "PDF export functionality would be implemented here",
+      "loadingData": "Loading financial data..."
     }
   },
   "sales": {
