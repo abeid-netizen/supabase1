@@ -4,11 +4,12 @@ import { Dashboard } from "@/pages/Dashboard";
 import { SalesDashboard } from "@/pages/SalesDashboard";
 import { SalesCart } from "@/pages/SalesCart";
 import { InventoryDashboard } from "@/pages/InventoryDashboard";
+import { FinanceDashboard } from "@/pages/FinanceDashboard";
 import { authService } from "@/services/authService";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 
-type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "inventory" | "inventory-dashboard" | "purchase" | "finance";
+type ViewState = "login" | "dashboard" | "sales" | "sales-cart" | "inventory" | "inventory-dashboard" | "purchase" | "finance" | "finance-dashboard";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewState>("login");
@@ -67,9 +68,11 @@ const Index = () => {
       case "inventory":
         setCurrentView("inventory-dashboard");
         break;
-      case "purchase":
       case "finance":
-        // These will be implemented later
+        setCurrentView("finance-dashboard");
+        break;
+      case "purchase":
+        // This will be implemented later
         setCurrentView(destination as ViewState);
         break;
       default:
@@ -86,6 +89,9 @@ const Index = () => {
         setCurrentView("sales");
         break;
       case "inventory-dashboard":
+        setCurrentView("dashboard");
+        break;
+      case "finance-dashboard":
         setCurrentView("dashboard");
         break;
       default:
@@ -130,6 +136,14 @@ const Index = () => {
     case "inventory-dashboard":
       return (
         <InventoryDashboard
+          username={user.email}
+          onBack={handleBack}
+          onLogout={handleLogout}
+        />
+      );
+    case "finance-dashboard":
+      return (
+        <FinanceDashboard
           username={user.email}
           onBack={handleBack}
           onLogout={handleLogout}
