@@ -9,6 +9,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { productService, Product } from "@/services/productService";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/lib/currency";
 
 interface InventoryDashboardProps {
   username: string;
@@ -255,7 +256,7 @@ export const InventoryDashboard = ({ username, onBack, onLogout }: InventoryDash
                           <h4 className="font-medium">{product.name}</h4>
                           <div className="flex gap-4 mt-1">
                             <p className="text-sm text-muted-foreground">
-                              {t("common.price")}: ${product.price.toFixed(2)}
+                              {t("common.price")}: {formatCurrency(product.price)}
                             </p>
                             <p className="text-sm text-muted-foreground">
                               {t("common.quantity")}: {product.quantity}

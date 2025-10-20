@@ -9,6 +9,7 @@ import { Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { productService, transactionService, Product, TransactionItem } from "@/services/productService";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/lib/currency";
 
 interface CartItem extends Product {
   quantity: number;
@@ -166,7 +167,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-medium">{product.name}</h3>
-                          <p className="text-sm text-muted-foreground">${product.price.toFixed(2)}</p>
+                          <p className="text-sm text-muted-foreground">{formatCurrency(product.price)}</p>
                         </div>
                         <Button 
                           size="sm" 
@@ -209,7 +210,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                         <div className="flex-1">
                           <h4 className="font-medium">{item.name}</h4>
                           <p className="text-sm text-muted-foreground">
-                            ${item.price.toFixed(2)} {t("common.each")}
+                            {formatCurrency(item.price)} {t("common.each")}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -262,7 +263,7 @@ export const SalesCart = ({ username, onBack, onLogout }: SalesCartProps) => {
                 
                 <div className="flex justify-between items-center font-semibold text-lg">
                   <span>{t("common.total")}:</span>
-                  <span>${getTotalAmount().toFixed(2)}</span>
+                  <span>{formatCurrency(getTotalAmount())}</span>
                 </div>
                 
                 <Button 
